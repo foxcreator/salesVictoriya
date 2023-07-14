@@ -1,0 +1,10 @@
+----Поиск в диапазоне дат по БД----
+
+use Carbon\Carbon;
+
+$startDate = Carbon::parse('2023-01-01')->startOfDay();
+$endDate = Carbon::parse('2023-01-31')->endOfDay();
+
+$carts = Cart::whereBetween('created_at', [$startDate, $endDate])->get();
+
+-----------------------------------
