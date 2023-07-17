@@ -51,7 +51,7 @@
                                     <td>{{($product->total_sold * $product->price) - ($product->total_sold * $product->opt_price) }} грн</td>
                                     @endforeach
                                     <td rowspan="{{ count($productsSold) }}"><h2 class="text-dark">{{ $totalSales }} грн</h2></td>
-                                    <td rowspan="{{ count($productsSold) }}"><h2 class="text-success">{{ $totalOptSales }} грн</h2></td>
+                                    <td rowspan="{{ count($productsSold) }}"><h2 class="text-success">{{ $totalSales - $totalOptSales }} грн</h2></td>
                                 </tr>
                             </tbody>
                         </table>

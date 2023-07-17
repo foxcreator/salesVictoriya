@@ -19,4 +19,9 @@ class Supplier extends Model
     {
         return $this->hasMany(Delivery::class, 'supplier_id');
     }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_supplier');
+    }
 }

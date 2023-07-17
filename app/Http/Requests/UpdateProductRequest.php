@@ -24,13 +24,15 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
 
+        $productId = $this->route('id'); // Получаем ID текущего продукта из маршрута
 
         return [
-            'name' => ['required', 'string', 'min:3'],
-            'description' => ['required', 'string', 'min:10'],
+            'name' => ['required', 'string', 'min:3', Rule::unique('products')->ignore($productId)],
+            'barcode' => ['required', 'string', 'min:8'],
+            'supplier' => ['required'],
             'price' => ['required', 'numeric', 'min:1'],
-            'quantity' => ['required', 'numeric', 'min:0'],
             'thumbnail' => ['nullable', 'image:jpeg,png,jpg'],
         ];
     }
+
 }

@@ -56,7 +56,7 @@ class CartController extends Controller
     {
         session()->forget('cart');
 
-        return redirect()->route('index')->with('status', 'Корзина успешно очищена');
+        return redirect()->route('home')->with('status', 'Корзина успешно очищена');
     }
 
 

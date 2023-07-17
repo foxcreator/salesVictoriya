@@ -27,7 +27,16 @@
                         @endif
                         <form action="{{ route('store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <div class="form-floating mb-3">
+                            <h4 class="mb-3">Поставщик(и):</h4>
+                            <div class="row d-flex justify-content-center">
+                            @foreach($suppliers as $supplier)
+                                <div class="form-check form-switch text-start col-md-2 me-2">
+                                    <input class="form-check-input" type="checkbox" role="switch" name="supplier[]" value="{{ $supplier->id }}" id="supplier{{ $supplier->id }}">
+                                    <label class="form-check-label" for="supplier{{ $supplier->id }}"><h6>{{ $supplier->name }}</h6></label>
+                                </div>
+                            @endforeach
+                            </div>
+                            <div class="form-floating mb-3 mt-4">
                                 <input type="text" class="form-control @error('name')is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" placeholder="Наименование товара" required>
                                 <label for="name">Наименование товара</label>
                             </div>

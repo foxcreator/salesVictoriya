@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\Supplier;
 use App\Models\Unit;
 use App\Services\ReportsServise;
 use Illuminate\Http\Request;
@@ -37,7 +38,7 @@ class HomeController extends Controller
         if ($search) {
             $products = Product::where('name', 'LIKE', '%' . $search . '%')->paginate(8);
         } else {
-            $products = Product::where('on_sale', 1)->paginate(8);
+            $products = Product::where('on_sale', 1)->paginate(20);
         }
 
 
@@ -47,12 +48,13 @@ class HomeController extends Controller
     public function create()
     {
         $units = Unit::all();
-        return view('admin.products.create', compact('units'));
+        $suppliers = Supplier::all();
+        return view('admin.products.create', compact('units', 'suppliers'));
     }
 
     public function products()
     {
-        $products = Product::where('on_sale', 1)->paginate(10);
+        $products = Product::where('on_sale', 1)->paginate(20);
 
         return view('admin.products.index', compact('products'));
     }
@@ -60,7 +62,8 @@ class HomeController extends Controller
     public function edit($id)
     {
         $product = Product::find($id);
-        return view('admin.products.edit', compact('product'));
+        $suppliers = Supplier::all();
+        return view('admin.products.edit', compact('product', 'suppliers'));
     }
 
     public function todayReport(Request $request)

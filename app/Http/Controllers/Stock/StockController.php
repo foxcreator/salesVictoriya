@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Stock;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateDeliveryRequest;
 use App\Models\Delivery;
 use App\Models\Ingridient;
 use App\Models\Product;
@@ -13,9 +14,25 @@ use function view;
 
 class StockController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $deliveries = Delivery::with('products', 'suppliers')->get();
+
+        $query = Delivery::with('products', 'suppliers');
+        $search = null;
+        // Поиск по тексту
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "%$search%")
+                    ->orWhereHas('suppliers', function ($q) use ($search) {
+                        $q->where('name', 'like', "%$search%")
+                            ->orWhere('deliver_name', 'like', "%$search%");
+                    })
+                    ->orWhereDate('created_at', 'like', "%$search%");
+            });
+        }
+
+        $deliveries = $query->get();
 
         foreach ($deliveries as $delivery) {
             $totalAmount = 0;
@@ -26,19 +43,31 @@ class StockController extends Controller
 
             $delivery->total_amount = $totalAmount;
         }
-        return view('admin.stock.index', compact('deliveries'));
+
+        $deliveries = $deliveries->sortByDesc('created_at');
+        return view('admin.stock.index', compact('deliveries', 'search'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $products = Product::all();
-        $suppliers = Supplier::all();
+
+        $supplierId = $request->all()['supplier_id'];
+        $supplier = Supplier::find($supplierId);
+
+        $products = $supplier->products;
         $deliveries = Delivery::all();
 
-        return view('admin.stock.create', compact('products', 'suppliers'));
+        return view('admin.stock.create', compact('products', 'supplierId'));
     }
 
-    public function store(Request $request)
+    public function firstStep()
+    {
+        $suppliers = Supplier::all();
+
+        return view('admin.stock.create_first_step', compact('suppliers'));
+    }
+
+    public function store(CreateDeliveryRequest $request)
     {
         $delivery = new Delivery();
         if ($request->has('supplier_id')) {
@@ -83,5 +112,16 @@ class StockController extends Controller
         $products = $delivery->products()->withPivot('quantity', 'purchase_price', 'retail_price')->get();
 
         return view('admin.stock.single', compact('delivery', 'products'));
+    }
+
+
+    public function getProductsBySupplier(Request $request, $supplierId)
+    {
+        // Получите список продуктов, связанных с выбранным поставщиком
+        $supplierName = Supplier::findOrFail($supplierId)->name;
+        $products = Product::where('supplier', $supplierName)->get();
+
+        // Верните список продуктов в формате JSON
+        return response()->json(['products' => $products]);
     }
 }

@@ -14,6 +14,7 @@ class Product extends Model
 
     protected $fillable = [
         'name',
+        'supplier',
         'description',
         'barcode',
         'unit',
@@ -33,6 +34,11 @@ class Product extends Model
         return $this->belongsToMany(Delivery::class, 'delivery_product')
             ->using(DeliveryProduct::class)
             ->withPivot(['quantity', 'purchase_price', 'retail_price']);
+    }
+
+    public function suppliers()
+    {
+        return $this->belongsToMany(Supplier::class, 'product_supplier');
     }
 
     public function removeFromCart()

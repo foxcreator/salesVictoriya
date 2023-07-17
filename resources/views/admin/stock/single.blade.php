@@ -4,13 +4,16 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card text-center">
-                <div class="card-header">Поставки</div>
+                <div class="card-header">Поставка №{{ $delivery->id }} от {{ $delivery->created_at->format('Y-m-d') }}</div>
                 <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>
                     @endif
+                    <div class="text-start">
+                        <a class="btn btn-outline-info" href="{{ route('admin.stock') }}"><- Назад</a>
+                    </div>
                     <table class="table">
                         <thead>
                         <tr>

@@ -37,7 +37,7 @@ Route::group(['middleware' => 'role:admin'], function () {
     Route::post('/product/store', [App\Http\Controllers\ProductController::class, 'store'])->name('store');
     Route::post('/product/update/{id}', [App\Http\Controllers\ProductController::class, 'update'])->name('update');
     Route::post('/product/delete/{id}', [App\Http\Controllers\ProductController::class, 'delete'])->name('delete');
-    Route::post('/product/edit/{id}', [App\Http\Controllers\ProductController::class, 'edit'])->name('edit');
+    Route::put('/product/edit/{id}', [App\Http\Controllers\ProductController::class, 'edit'])->name('edit');
 
     Route::get('/products', [\App\Http\Controllers\HomeController::class, 'products'])->name('admin.products');
     Route::get('/products/edit/{id}', [\App\Http\Controllers\HomeController::class, 'edit'])->name('admin.edit');
@@ -49,14 +49,20 @@ Route::group(['middleware' => 'role:admin'], function () {
 
 
     Route::get('/stock', [\App\Http\Controllers\Stock\StockController::class, 'index'])->name('admin.stock');
+    Route::get('/stock/first-step', [\App\Http\Controllers\Stock\StockController::class, 'firstStep'])->name('admin.stock.first_step');
+    Route::get('/stock/first-step-check', [\App\Http\Controllers\Stock\StockController::class, 'firstStepCheck'])->name('admin.stock.first_step_check');
+
     Route::get('/stock/create', [\App\Http\Controllers\Stock\StockController::class, 'create'])->name('admin.stock.create');
     Route::post('/stock/store', [\App\Http\Controllers\Stock\StockController::class, 'store'])->name('admin.stock.store');
     Route::post('/stock/delete/{id}', [\App\Http\Controllers\Stock\StockController::class, 'delete'])->name('admin.stock.delete');
     Route::get('/stock/single-delivery/{delivery}', [\App\Http\Controllers\Stock\StockController::class, 'singleDelivery'])->name('admin.stock.delivery');
+    Route::get('/admin/stock/products/{supplierId}', [\App\Http\Controllers\Stock\StockController::class, 'getProductsBySupplier'])->name('admin.stock.products');
+
 
     Route::get('/suppliers', [\App\Http\Controllers\SupplierController::class, 'index'])->name('admin.suppliers');
     Route::get('/suppliers/create', [\App\Http\Controllers\SupplierController::class, 'create'])->name('admin.suppliers.create');
     Route::post('/suppliers/store', [\App\Http\Controllers\SupplierController::class, 'store'])->name('admin.suppliers.store');
     Route::post('/suppliers/delete/{id}', [\App\Http\Controllers\SupplierController::class, 'delete'])->name('admin.suppliers.delete');
+
 
 });

@@ -1,3 +1,6 @@
+<?php
+$cart = session()->get('cart');
+?>
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -7,7 +10,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Pekara Sales') }}</title>
+    <title>{{ config('app.name', 'Sales') }}</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
@@ -25,7 +28,7 @@
 <nav class="navbar navbar-expand-lg bg-info-subtle position-fixed z-1 w-100">
     <div class="container">
         <a class="navbar-brand" href="{{ route('home') }}">
-            <img class="img-fluid" src="/assets/img/PekaraLogo_1.png" alt="Slovenska Pekara" style="max-height: 40px">
+            <h4 style="color: #6b727a;">ProductsVictory</h4>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,7 +139,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('cart') }}">Открытый чек
                             @if(session()->get('cart', []))
-                                <span class="badge text-bg-info">New</span>
+                                <span class="badge text-bg-warning">{{ count($cart) }}</span>
                             @endif
                         </a>
                     </li>
