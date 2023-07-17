@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\Unit;
@@ -49,7 +50,8 @@ class HomeController extends Controller
     {
         $units = Unit::all();
         $suppliers = Supplier::all();
-        return view('admin.products.create', compact('units', 'suppliers'));
+        $categories = Category::all();
+        return view('admin.products.create', compact('units', 'suppliers', 'categories'));
     }
 
     public function products()
@@ -63,7 +65,8 @@ class HomeController extends Controller
     {
         $product = Product::find($id);
         $suppliers = Supplier::all();
-        return view('admin.products.edit', compact('product', 'suppliers'));
+        $categories = Category::all();
+        return view('admin.products.edit', compact('product', 'suppliers', 'categories'));
     }
 
     public function todayReport(Request $request)

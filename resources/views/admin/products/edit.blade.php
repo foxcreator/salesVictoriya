@@ -18,7 +18,7 @@
                     <form action="{{ route('edit', $product->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <h4 class="mb-3">Поставщик(и):</h4>
+                        <h4 class="mb-3">Выберите поставщика(ов):</h4>
                         <div class="row d-flex justify-content-center">
                             @foreach($suppliers as $supplier)
                                 <div class="form-check form-switch text-start col-md-2 me-2">
@@ -35,6 +35,14 @@
                                 </div>
                             @endforeach
                         </div>
+                        <select name="category_id" class="form-select mb-3 mt-3" aria-label="Category">
+                            <option>--Выберите категорию--</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control @error('name')is-invalid @enderror" id="name" name="name" placeholder="Наименование товара" value="{{ $product->name }}" required>
                             <label for="name">Наименование товара</label>

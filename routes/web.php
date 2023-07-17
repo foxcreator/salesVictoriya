@@ -42,6 +42,9 @@ Route::group(['middleware' => 'role:admin'], function () {
     Route::get('/products', [\App\Http\Controllers\HomeController::class, 'products'])->name('admin.products');
     Route::get('/products/edit/{id}', [\App\Http\Controllers\HomeController::class, 'edit'])->name('admin.edit');
 
+    Route::get('/category/create', [\App\Http\Controllers\CategoryController::class, 'create'])->name('admin.category.create');
+    Route::post('/category/store', [\App\Http\Controllers\CategoryController::class, 'store'])->name('admin.category.store');
+
     Route::get('/reports', [\App\Http\Controllers\HomeController::class, 'todayReport'])->name('admin.reports');
     Route::get('/reports/yesterday', [\App\Http\Controllers\HomeController::class, 'yesterdayReport'])->name('admin.reports.yesterday');
 //    Route::get('/reports/monthly', [\App\Http\Controllers\HomeController::class, 'monthlyReport'])->name('admin.reports.monthly');

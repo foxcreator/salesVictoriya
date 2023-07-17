@@ -27,7 +27,7 @@
                         @endif
                         <form action="{{ route('store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <h4 class="mb-3">Поставщик(и):</h4>
+                            <h4 class="mb-3">Выберите поставщика(ов):</h4>
                             <div class="row d-flex justify-content-center">
                             @foreach($suppliers as $supplier)
                                 <div class="form-check form-switch text-start col-md-2 me-2">
@@ -36,6 +36,12 @@
                                 </div>
                             @endforeach
                             </div>
+                            <select name="category_id" class="form-select mt-3" aria-label="Category">
+                                <option selected>--Выберите категорию--</option>
+                                @foreach($categories as $category)
+                                <option id="category_id" value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
                             <div class="form-floating mb-3 mt-4">
                                 <input type="text" class="form-control @error('name')is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" placeholder="Наименование товара" required>
                                 <label for="name">Наименование товара</label>
@@ -49,12 +55,12 @@
                                 <label for="barcode">Штрихкод</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control @error('price')is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" placeholder="Цена" required>
-                                <label for="price">Цена розница (грн)</label>
-                            </div>
-                            <div class="form-floating mb-3">
                                 <input type="text" class="form-control @error('opt_price')is-invalid @enderror" id="opt_price" name="opt_price" value="{{ old('opt_price') }}" placeholder="Цена оптовая" required>
                                 <label for="price">Цена оптовая (грн)</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control @error('price')is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" placeholder="Цена" required>
+                                <label for="price">Цена розничная (грн)</label>
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control @error('quantity')is-invalid @enderror" id="quantity" name="quantity"  value="{{ old('quantity') }}" placeholder="Количество товара на складе" required>

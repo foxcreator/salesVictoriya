@@ -14,6 +14,7 @@ class Product extends Model
 
     protected $fillable = [
         'name',
+        'category_id',
         'supplier',
         'description',
         'barcode',
@@ -39,6 +40,11 @@ class Product extends Model
     public function suppliers()
     {
         return $this->belongsToMany(Supplier::class, 'product_supplier');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function removeFromCart()

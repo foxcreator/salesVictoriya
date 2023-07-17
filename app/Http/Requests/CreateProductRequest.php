@@ -51,6 +51,7 @@ class CreateProductRequest extends FormRequest
         return [
             'name' => 'required|string|min:3|unique:products',
             'barcode' => 'required|string|min:8|numeric',
+            'category_id' => 'required',
             'supplier' => 'required',
             'unit' => 'string',
             'price' => 'required|numeric|min:1|gt:opt_price',

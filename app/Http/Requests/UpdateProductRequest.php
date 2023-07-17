@@ -29,6 +29,7 @@ class UpdateProductRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'min:3', Rule::unique('products')->ignore($productId)],
             'barcode' => ['required', 'string', 'min:8'],
+            'category_id' => 'required',
             'supplier' => ['required'],
             'price' => ['required', 'numeric', 'min:1'],
             'thumbnail' => ['nullable', 'image:jpeg,png,jpg'],

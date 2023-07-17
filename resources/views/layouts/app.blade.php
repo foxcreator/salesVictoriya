@@ -56,6 +56,9 @@ $cart = session()->get('cart');
                                 <a class="dropdown-item" href="{{ route('create') }}">
                                     Добавить новый товар
                                 </a>
+                                <a class="dropdown-item" href="{{ route('admin.category.create') }}">
+                                    Добавить категорию товаров
+                                </a>
 
                             </div>
                         </li>
