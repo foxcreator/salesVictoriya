@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Rules\RetailPriceGreaterThanPurchasePrice;
+
 
 class CreateDeliveryRequest extends FormRequest
 {
@@ -39,6 +41,9 @@ class CreateDeliveryRequest extends FormRequest
         ];
     }
 
+
+// ...
+
     public function rules()
     {
         $rules = [
@@ -49,9 +54,16 @@ class CreateDeliveryRequest extends FormRequest
         foreach ($this->input('products', []) as $productId) {
             $rules['quantity.' . $productId] = 'required|numeric';
             $rules['purchase_price.' . $productId] = 'required|numeric|min:1';
-            $rules['retail_price.' . $productId] = 'required|numeric|min:1|gt:price';
+            $rules['retail_price.' . $productId] = [
+                'required',
+                'numeric',
+                'min:1',
+                new RetailPriceGreaterThanPurchasePrice($productId), // Используем кастомное правило
+            ];
         }
 
         return $rules;
     }
+
+
 }

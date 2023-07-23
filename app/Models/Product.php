@@ -30,6 +30,11 @@ class Product extends Model
         return $this->hasMany(Cart::class);
     }
 
+    public function temporaryCheckouts()
+    {
+        return $this->hasMany(TemporaryCheckout::class);
+    }
+
     public function deliveries()
     {
         return $this->belongsToMany(Delivery::class, 'delivery_product')
@@ -65,6 +70,25 @@ class Product extends Model
 
         return redirect()->back()->with('error', 'Товар не найден в чеке');
     }
+
+    public function removeFromTemporaryCartDb($product)
+    {
+        $productRow = TemporaryCheckout::where('product_id', $product->id)->first();
+
+        if ($productRow) {
+            if ($productRow->quantity <= 1) {
+                $productRow->delete();
+                $delete = true;
+            } else {
+                $productRow->quantity = $productRow->quantity - 1;
+                $productRow->save();
+                $delete = false;
+            }
+        }
+        return $delete;
+        return redirect()->back()->with('error', 'Товар не найден в чеке');
+    }
+
 
     public function setThumbnailAttribute($image)
     {

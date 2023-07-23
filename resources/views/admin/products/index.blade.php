@@ -48,18 +48,18 @@
                                 {{ $product->quantity }} {{ $product->unit }}
                             @endif
                         </td>
-                        <td class="w-50">
+                        <td class="w-25">
                         <div class="row d-flex justify-content-end">
-                            <button type="submit" class="btn btn-outline-info col-md-2 me-2">Update</button>
+                            <button type="submit" class="btn btn-outline-info col-md-5 me-2">Обновить</button>
 
-                            <a href="{{ route('admin.edit', $product->id) }}" class="btn btn-outline-warning col-md-2 me-2">Edit</a>
+                            <a href="{{ route('admin.edit', $product->id) }}" class="btn btn-outline-warning col-md-5 me-2">Изменить</a>
                         </div>
                         </td>
                         </form>
                         <td>
                             <form action="{{ route('delete', $product->id) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-outline-danger col-md-12">Remove</button>
+                                <button type="submit" class="btn btn-outline-danger col-md-12">Удалить</button>
                             </form>
                         </td>
                     </tr>

@@ -27,8 +27,9 @@ Route::get('/cart', [\App\Http\Controllers\CartController::class, 'index'])->nam
 Route::post('/cart/add/{product}', [\App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/remove/{product}', [\App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
 Route::post('/cart/checkout', [\App\Http\Controllers\CartController::class, 'checkout'])->name('cart.checkout');
+Route::post('/cart/checkout-temporary/{checkId}', [\App\Http\Controllers\CartController::class, 'checkoutTemporary'])->name('cart.checkout.temporary');
 Route::post('/cart/clear-cart', [\App\Http\Controllers\CartController::class, 'clear'])->name('cart.clear');
-
+Route::get('/cart/{checkId}', [\App\Http\Controllers\CartController::class, 'indexDelayed'])->name('cart.indexDelayed');
 
 
 Route::group(['middleware' => 'role:admin'], function () {

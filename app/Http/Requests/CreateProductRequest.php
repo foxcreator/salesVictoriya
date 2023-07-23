@@ -28,6 +28,7 @@ class CreateProductRequest extends FormRequest
         return [
             'name.min' => 'Наименование должно содержать не менее 3х символов',
             'name.unique' => 'Название уже существует',
+            'category_id' => 'Выберете категорию товара!',
             'barcode.min' => 'Штрихкод должен содержать не менее 8 цифр',
             'barcode' => 'Заполните поле Штрихкод',
             'barcode.numeric' => 'Штрихкод должен содержать только цифры',
@@ -51,7 +52,7 @@ class CreateProductRequest extends FormRequest
         return [
             'name' => 'required|string|min:3|unique:products',
             'barcode' => 'required|string|min:8|numeric',
-            'category_id' => 'required',
+            'category_id' => 'required|numeric',
             'supplier' => 'required',
             'unit' => 'string',
             'price' => 'required|numeric|min:1|gt:opt_price',
