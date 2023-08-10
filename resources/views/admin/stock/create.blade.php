@@ -35,14 +35,13 @@
                                         <label class="form-check-label"
                                                for="product{{ $product->id }}">{{ $product->name }}</label>
                                     </div>
-
                                 </div>
                                 <div class="col-md-7 d-flex justify-content-between">
-                                    <input type="text" class="form-control me-2 @error('quantity.' . $product->id) is-invalid @enderror" id="quantity{{ $product->id }}"
+                                    <input type="text" class="form-control me-2 quantity-input @error('quantity.' . $product->id) is-invalid @enderror" id="quantity{{ $product->id }}"
                                            name="quantity[{{ $product->id }}]" placeholder="Количество">
-                                    <input type="text" class="form-control me-2 @error('purchasePrice.' . $product->id) is-invalid @enderror" id="purchasePrice{{ $product->id }}"
+                                    <input type="text" class="form-control me-2 purchase-price-input @error('purchasePrice.' . $product->id) is-invalid @enderror" id="purchasePrice{{ $product->id }}"
                                            name="purchase_price[{{ $product->id }}]" placeholder="Цена закупки">
-                                    <input type="text" class="form-control @error('retailPrice.' . $product->id) is-invalid @enderror" id="retailPrice{{ $product->id }}"
+                                    <input type="text" class="form-control retail-price-input @error('retailPrice.' . $product->id) is-invalid @enderror" id="retailPrice{{ $product->id }}"
                                            name="retail_price[{{ $product->id }}]" placeholder="Цена продажи">
                                     <input type="hidden" value="{{ $supplierId }}" name="supplier_id">
                                 </div>
@@ -55,6 +54,32 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            // Рассчитываем retailPrice на основе значения purchasePrice и добавляем 30
+            function calculateChange(purchasePriceInput, retailPriceInput) {
+                var purchaseAmount = parseFloat(purchasePriceInput.value);
+                var changeAmount = purchaseAmount + (purchaseAmount * 0.3);
+
+                if (isNaN(changeAmount)) {
+                    changeAmount = 0;
+                }
+
+                var roundedAmount = Math.ceil(changeAmount / 5) * 5;
+                retailPriceInput.value = roundedAmount.toFixed();
+            }
+
+            // Используем делегирование событий для расчета retailPrice при изменении purchasePrice
+            document.addEventListener('input', function (event) {
+                if (event.target.classList.contains('purchase-price-input')) {
+                    var purchasePriceInput = event.target;
+                    var retailPriceInput = purchasePriceInput.parentElement.querySelector('.retail-price-input');
+                    calculateChange(purchasePriceInput, retailPriceInput);
+                }
+            });
+        </script>
+
+
 @endsection
 
 

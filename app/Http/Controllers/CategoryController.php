@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
     public function create()
     {
-        return view('admin.categories.create');
+        return view('new_design.admin.categories.create');
     }
 
     public function store(CreateCategoryRequest $request)

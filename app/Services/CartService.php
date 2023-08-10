@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Cart;
+use App\Models\DeliveryProduct;
 use App\Models\Product;
 use App\Models\TemporaryCheckout;
 use Illuminate\Http\Request;
@@ -21,7 +22,6 @@ class CartService
 
         // Объединяем товары из сессии и из отложенных чеков
         $allProducts = array_merge($cart, $delayedChecks->toArray());
-
         // Проверяем остатки товаров
         $totalQuantity = 0;
         foreach ($allProducts as $item) {
@@ -44,7 +44,7 @@ class CartService
             $cart[$product->id]['quantity'] = $cart[$product->id]['quantity'] + $quantity;
         } else {
             $cart[$product->id] = [
-                'id' => $product->id,
+                'product_id' => $product->id,
                 'name' => $product->name,
                 'price' => $product->price,
                 'opt_price' =>$product->opt_price,
@@ -63,46 +63,66 @@ class CartService
     {
         $user = Auth::user();
         $cart = session()->get('cart', []);
-        if ($isDelayed == 0) {
-            $checkId = $this->generateCheckId('check');
-            foreach ($cart as $productId => $item) {
-                $cartModel = Cart::create([
-                    'user_id' => $user->id,
-                    'product_id' => $productId,
-                    'price' => $item['price'],
-                    'opt_price' => $item['opt_price'],
-                    'quantity' => $item['quantity'],
-                    'check_id' => $checkId,
-                ]);
+        $checkId = $this->generateCheckId($isDelayed == 0 ? 'check' : 'temp');
 
-                $cartId = $cartModel->id;
+        foreach ($cart as $productId => $item) {
+            $remainingQuantity = $item['quantity'];
 
-                // Уменьшаем количество товара на складе
-                $product = Product::findOrFail($productId);
-                $product->quantity -= $item['quantity'];
-                $product->save();
+            while ($remainingQuantity > 0) {
+                $productDelivery = DeliveryProduct::where('product_id', $productId)
+                    ->where('available_quantity', '>', 0)
+                    ->orderBy('created_at', 'asc')
+                    ->first();
+
+                if (!$productDelivery) {
+                    break; // Нет доступных поставок, прекращаем
+                }
+
+                $quantityToTake = min($remainingQuantity, $productDelivery->available_quantity);
+
+                if ($productDelivery->purchase_price) {
+                    $optPrice = $productDelivery->purchase_price;
+                } else {
+                    $optPrice = $item['opt_price'];
+                }
+
+                if ($isDelayed == 0) {
+                    Cart::create([
+                        'user_id' => $user->id,
+                        'product_id' => $productId,
+                        'price' => $item['price'],
+                        'opt_price' => $optPrice,
+                        'quantity' => $quantityToTake,
+                        'check_id' => $checkId,
+                    ]);
+                } else {
+                    TemporaryCheckout::create([
+                        'user_id' => $user->id,
+                        'product_id' => $productId,
+                        'price' => $item['price'],
+                        'opt_price' => $optPrice,
+                        'quantity' => $quantityToTake,
+                        'check_id' => $checkId,
+                    ]);
+                }
+
+                $productDelivery->available_quantity -= $quantityToTake;
+                $productDelivery->save();
+
+                $remainingQuantity -= $quantityToTake;
             }
-        } elseif($isDelayed == 1) {
-            $checkId = $this->generateCheckId('temp');
-            foreach ($cart as $productId => $item) {
-                $cartModel = TemporaryCheckout::create([
-                    'user_id' => $user->id,
-                    'product_id' => $productId,
-                    'price' => $item['price'],
-                    'opt_price' => $item['opt_price'],
-                    'quantity' => $item['quantity'],
-                    'check_id' => $checkId,
-                ]);
 
-                $cartId = $cartModel->id;
-
-            }
+            // Уменьшаем общий остаток товара
+            $product = Product::findOrFail($productId);
+            $product->quantity -= $item['quantity'];
+            $product->save();
         }
 
         session()->forget('cart');
 
-        return $cartId;
+        return $checkId;
     }
+
 
     public function getTotal()
     {

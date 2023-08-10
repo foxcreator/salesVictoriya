@@ -15,7 +15,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form action="{{ route('edit', $product->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.product.edit', $product->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <h4 class="mb-3">Выберите поставщика(ов):</h4>

@@ -29,8 +29,7 @@ class CartController extends Controller
         $data = TemporaryCheckout::select('check_id')->distinct()->get()->pluck('check_id');
         $checkCount = TemporaryCheckout::distinct('check_id')->count();
 
-
-        return view('cart.index',
+        return view('new_design.cart.index',
             compact('cart', 'total', 'checkCount', 'data'
             ));
     }
@@ -47,7 +46,9 @@ class CartController extends Controller
             $total += $item->price * $item->quantity;
         }
 
-        return view('cart.index', compact('cart', 'total', 'checkCount', 'data', 'idCheck'));
+        return view('new_design.cart.index',
+            compact('cart', 'total', 'checkCount', 'data', 'idCheck'
+            ));
     }
 
     public function add(Request $request, Product $product)

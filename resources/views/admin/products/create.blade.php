@@ -25,7 +25,7 @@
                                 </ul>
                             </div>
                         @endif
-                        <form action="{{ route('store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <h4 class="mb-3">Выберите поставщика(ов):</h4>
                             <div class="row d-flex justify-content-center">
