@@ -31,7 +31,6 @@
                         </div>
                     @endif
                     @if($cart)
-
                         <table class="table">
                             <thead>
                             <tr>
@@ -46,7 +45,7 @@
                             <tbody>
                             @foreach($cart as $item)
                                 <tr>
-                                    <th scope="row">{{ $item['id'] }}</th>
+                                    <th scope="row">{{ $item['product_id'] }}</th>
                                     <td>
                                         @if (is_object($item) && $item->product)
                                             {{ $item->product->name }}
@@ -65,7 +64,7 @@
                                                 @csrf
                                             </form>
                                         @else
-                                            <form action="{{ route('cart.remove', $item['id']) }}" method="POST">
+                                            <form action="{{ route('cart.remove', $item['product_id']) }}" method="POST">
                                                 <button class="btn btn-danger">Удалить 1 шт.</button>
                                                 @csrf
                                             </form>
@@ -97,7 +96,7 @@
                                 data-bs-target="#staticBackdrop">
                             Расчет
                         </button>
-                        @if(Request::route('checkId'))
+                        @if(request()->route('checkId') !== null)
 
                         @else
                             <form class="d-flex text-end" action="{{ route('cart.checkout') }}" method="POST">

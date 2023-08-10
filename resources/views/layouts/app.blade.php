@@ -50,10 +50,10 @@ $cart = session()->get('cart');
 
                             <div class="dropdown-menu dropdown-menu-end bg-info-subtle"
                                  aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('admin.products') }}">
+                                <a class="dropdown-item" href="{{ route('admin.product') }}">
                                     Все товары
                                 </a>
-                                <a class="dropdown-item" href="{{ route('create') }}">
+                                <a class="dropdown-item" href="{{ route('admin.product.create') }}">
                                     Добавить новый товар
                                 </a>
                                 <a class="dropdown-item" href="{{ route('admin.category.create') }}">
@@ -74,7 +74,7 @@ $cart = session()->get('cart');
                                 <a class="dropdown-item" href="{{ route('admin.reports') }}">
                                     Дневной отчет
                                 </a>
-                                <a class="dropdown-item" href="{{ route('admin.reports.calcmonthly') }}">
+                                <a class="dropdown-item" href="{{ route('admin.reports.monthly') }}">
                                     Месячный отчет
                                 </a>
                                 <a class="dropdown-item disabled" href="{{ route('admin.reports') }}">
@@ -160,7 +160,9 @@ $cart = session()->get('cart');
                                                      document.getElementById('logout-form').submit();">
                                 {{ __('Выйти') }}
                             </a>
-                            @if(Auth::user()->role === 'admin')
+                            <a href="{{ route('set_design', ['design' => 'new_design']) }}" class="dropdown-item">Новый дизайн</a>
+
+                        @if(Auth::user()->role === 'admin')
                                 <a class="dropdown-item" href="{{ route('register') }}">Добавить сотрудника</a>
                             @endif
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

@@ -28,7 +28,7 @@
                     <tbody>
                     @foreach($products as $product)
                     <tr>
-                        <form action="{{ route('update', $product->id) }}" method="POST">
+                        <form action="{{ route('admin.product.update', $product->id) }}" method="POST">
                             @csrf
                         <th scope="row">
                             @if($product->thumbnail)
@@ -52,12 +52,12 @@
                         <div class="row d-flex justify-content-end">
                             <button type="submit" class="btn btn-outline-info col-md-5 me-2">Обновить</button>
 
-                            <a href="{{ route('admin.edit', $product->id) }}" class="btn btn-outline-warning col-md-5 me-2">Изменить</a>
+                            <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-outline-warning col-md-5 me-2">Изменить</a>
                         </div>
                         </td>
                         </form>
                         <td>
-                            <form action="{{ route('delete', $product->id) }}" method="POST">
+                            <form action="{{ route('admin.product.delete', $product->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-outline-danger col-md-12">Удалить</button>
                             </form>
