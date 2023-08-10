@@ -10,12 +10,12 @@ class SupplierController extends Controller
     public function index()
     {
         $suppliers = Supplier::all();
-        return view('admin.suppliers.index', compact('suppliers'));
+        return view('new_design.admin.suppliers.index', compact('suppliers'));
     }
 
     public function create()
     {
-        return view('admin.suppliers.create');
+        return view('new_design.admin.suppliers.create');
     }
 
     public function store(Request $request)
