@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class ReportsServise
 {
-    public function dailyReports($day, $search)
+    public function dailyReports($day, $search = null)
     {
         $query = Cart::join('products', 'carts.product_id', '=', 'products.id')
             ->join('users', 'carts.user_id', '=', 'users.id')

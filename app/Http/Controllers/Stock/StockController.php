@@ -8,6 +8,7 @@ use App\Models\Delivery;
 use App\Models\Ingridient;
 use App\Models\Product;
 use App\Models\Supplier;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use function redirect;
 use function view;
@@ -45,7 +46,8 @@ class StockController extends Controller
         }
 
         $deliveries = $deliveries->sortByDesc('created_at');
-        return view('admin.stock.index', compact('deliveries', 'search'));
+
+        return view('new_design.admin.stock.index', compact('deliveries', 'search'));
     }
 
     public function create(Request $request)
@@ -57,14 +59,13 @@ class StockController extends Controller
         $products = $supplier->products;
         $deliveries = Delivery::all();
 
-        return view('admin.stock.create', compact('products', 'supplierId'));
+        return view('new_design.admin.stock.create', compact('products', 'supplierId', 'supplier'));
     }
 
     public function firstStep()
     {
         $suppliers = Supplier::all();
-
-        return view('admin.stock.create_first_step', compact('suppliers'));
+        return view('new_design.admin.stock.create_first_step', compact('suppliers'));
     }
 
     public function store(CreateDeliveryRequest $request)
@@ -99,10 +100,13 @@ class StockController extends Controller
             // Связываем продукт с поставкой
             $delivery->products()->attach($productId, [
                 'quantity' => $quantity,
+                'available_quantity' => $quantity,
                 'purchase_price' => $purchasePrice,
                 'retail_price' => $retailPrice,
+                'created_at' => Carbon::now(),
             ]);
         }
+
         return redirect()->route('admin.stock')->with('status', "Продукт(ы) успешно добавлен(ы)");
 
     }
@@ -111,7 +115,12 @@ class StockController extends Controller
     {
         $products = $delivery->products()->withPivot('quantity', 'purchase_price', 'retail_price')->get();
 
-        return view('admin.stock.single', compact('delivery', 'products'));
+        $totalAmount = 0;
+        foreach ($products as $product) {
+            $totalAmount += $product->pivot->quantity * $product->pivot->purchase_price;
+        }
+
+        return view('new_design.admin.stock.single', compact('delivery', 'products', 'totalAmount'));
     }
 
 
