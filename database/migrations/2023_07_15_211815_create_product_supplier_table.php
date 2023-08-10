@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_supplier', function (Blueprint $table) {
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('supplier_id');
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->unsignedBigInteger('supplier_id')->nullable();
             $table->timestamps();
 
             // Add foreign key constraints
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('set null');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('set null');
 
             // Add unique constraint to ensure one-to-many relationship
             $table->unique(['product_id', 'supplier_id']);
